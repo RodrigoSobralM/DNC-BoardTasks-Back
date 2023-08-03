@@ -20,12 +20,12 @@ let doc = {
             description: "Servidor localhost."
         },
         {
-            url: "https://dnc-board-tasks-back-five.vercel.app/",
+            url: "https://dnc-board-tasks-back.vercel.app/",
             description: "Servidor de produção."
         }
     ],
     consumes: ['application/json'],
-    produces: ['application/json'],
+    produces: ['application/json']
 }
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
