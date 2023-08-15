@@ -1,5 +1,5 @@
 const routes = (app) => {
-    app.use ('/users', require('./routes/users.js'))
+    app.use ('/usuario', require('./routes/usuario.js'))
     return;
 }
 
