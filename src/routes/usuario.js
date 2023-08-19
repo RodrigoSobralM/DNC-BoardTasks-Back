@@ -4,7 +4,6 @@ const tratarErrosEsperados = require("../functions/tratarErrosEsperados");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const EsquemaUsuario = require("../models/usuario");
-const authUser = require("../middlewares/authUser");
 const router = express.Router();
 
 /* GET users listing. */
@@ -26,6 +25,9 @@ router.post("/criar", conectarBancoDados, async function (req, res) {
       resposta: respostaDB,
     });
   } catch (error) {
+    if (String(error).includes('email_1 dup key')){ 
+      return tratarErrosEsperados(res, 'Error: Ja existe uma conta com esse e-mail')
+    }
     return tratarErrosEsperados(res, error);
   }
 });
