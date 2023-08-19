@@ -36,8 +36,6 @@ router.put('/editar/:id', authUser, conectarBancoDados, async function (req, res
       throw new Error("Tarefa não encontrada ou pertence a outro usuário");
     }
 
-    const respostaBD = await EsquemaTarefa.updateOne({_id:idTarefa}, {posicao, titulo, descricao, status, dataEntrega })
-
     const tarefaAtualizada = await EsquemaTarefa.updateOne({ _id: idTarefa }, { posicao, titulo, descricao, status, dataEntrega });
     if (tarefaAtualizada?.modifiedCount > 0) {
       const dadosTarefa = await EsquemaTarefa.findOne({ _id: idTarefa }).populate('usuarioCriador');
@@ -48,6 +46,24 @@ router.put('/editar/:id', authUser, conectarBancoDados, async function (req, res
         resposta: dadosTarefa
       })
     }
+  } catch (error) {
+    return tratarErrosEsperados(res, error);
+  }
+});
+
+router.get('/obter/usuario', authUser, conectarBancoDados, async function (req, res) {
+  try {
+    // #swagger.tags = ['Tarefa']
+    // #swagger.description =  "Endpoint para obter todas as tarefas do usuario logado"
+    const usuarioLogado = req.usuarioJwt.id;
+    const respostaBD = await EsquemaTarefa.find({ usuarioCriador: usuarioLogado }).populate('usuarioCriador');
+
+    res.status(200).json({
+      status: "OK",
+      statusMensagem: "Tarefas listadas na resposta com sucesso.",
+      resposta: respostaBD
+    })
+
   } catch (error) {
     return tratarErrosEsperados(res, error);
   }
